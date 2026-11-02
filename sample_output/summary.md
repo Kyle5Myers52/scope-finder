@@ -5,6 +5,8 @@
 | 08 33 13 Coiling Counter Doors | Specs | Listed but missing |  |  |
 | 08 33 23 Overhead Coiling Doors | Specs | Found | 4, 5, 6 |  |
 | 08 33 26 Overhead Coiling Grilles | Specs | Not in this set |  |  |
+| 08 33 43 Overhead Coiling Smoke Curtains | Specs | Not in this set |  |  |
+| 08 33 44 Overhead Coiling Fire Curtains | Specs | Not in this set |  |  |
 | 08 36 13 Sectional Doors | Specs | Found | 7, 8 |  |
 | 11 13 00 Loading Dock Equipment | Specs | Not in this set |  |  |
 | 11 13 13 Loading Dock Bumpers | Specs | Not in this set |  |  |
@@ -13,6 +15,7 @@
 | Mentions: Smoke curtains | Specs | Found | 13 |  |
 | Mentions: Dock equipment | Specs | Found | 9, 10, 11 |  |
 | Mentions: Overhead doors | Specs | Found | 4, 5, 6, 7, 8 |  |
+| Mentions: Fire curtains | Specs | No mentions |  |  |
 | Drawings: "door schedule" | Drawings | Found | 1, 3 | G-001, A-601 |
 | Drawings: "overhead door" | Drawings | No mentions |  |  |
 | Drawings: "coiling" | Drawings | Found | 3 | A-601 |
