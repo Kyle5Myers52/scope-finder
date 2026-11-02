@@ -20,6 +20,16 @@ My first attempt (2025) sent whole PDFs to an LLM through an n8n workflow and em
 
 So this version does the part that should be predictable: plain text search, page by page, with page numbers. No AI reads the documents, and every result can be checked by opening the page it points to.
 
+## Tested on a real bid set
+
+In November 2026 I ran it on a real commercial bid set: a 986-page spec book and a 182-page architectural drawing set (165 MB) from a 2025 multifamily project. The documents aren't in this repo.
+
+- **It found all 9 pages a dock and door dealer had pulled by hand for that bid:** four spec sections (coiling doors, smoke curtains, fire curtains, sectional doors) and five drawing pages (door schedules and garage door elevations).
+- **It surfaced scope filed somewhere unexpected:** overhead coiling doors for the trash compactor rooms listed only inside the door hardware section, including a third door that had no hand-pulled page.
+- **The first run missed two sections as sections.** Smoke and fire curtains (08 33 43 and 08 33 44) weren't in the rules yet; keyword search still caught them. They're in `rules.json` now.
+- **It's noisy.** It pulled 57 pages against the 9 kept by hand. Some extras are useful (other buildings' door schedules), some are just mentions (fire alarm and steel support sections). Cutting noise without losing scope is the next problem.
+- **Run time: 15 seconds** for all 1,168 pages after switching text extraction to PyMuPDF (about 5 minutes with pypdf alone).
+
 ## What it does
 
 - Reports, for each spec section in `rules.json`, whether it's **Found** (and on which pages), **Listed but missing** (in the table of contents, not in the book), or **Not in this set**.
@@ -49,8 +59,8 @@ To watch for other sections or words, edit `rules.json`.
 
 ## Next
 
-1. Run it next to hand takeoffs on real bid sets and record what it misses.
+1. Run it on more bid sets (next: a warehouse with dock equipment) and record what it misses.
 2. Read door schedule tables into rows (mark, type, size, quantity) where the PDF has a text layer.
 3. OCR for scanned sheets, page by page.
 
-Built with Python, pypdf and reportlab, with help from Claude as a coding assistant. The rules and test cases come from an estimator's description of how takeoffs actually work.
+Built with Python, pypdf, PyMuPDF (optional, AGPL; the tool falls back to pypdf without it) and reportlab, with help from Claude as a coding assistant. The rules and test cases come from an estimator's description of how takeoffs actually work.
