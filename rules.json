@@ -1,18 +1,80 @@
 {
   "sections": [
-    {"number": "08 33 13", "name": "Coiling Counter Doors"},
-    {"number": "08 33 23", "name": "Overhead Coiling Doors"},
-    {"number": "08 33 26", "name": "Overhead Coiling Grilles"},
-    {"number": "08 36 13", "name": "Sectional Doors"},
-    {"number": "11 13 00", "name": "Loading Dock Equipment"},
-    {"number": "11 13 13", "name": "Loading Dock Bumpers"},
-    {"number": "11 13 16", "name": "Loading Dock Seals and Shelters"},
-    {"number": "11 13 19", "name": "Stationary Loading Dock Equipment"}
+    {
+      "number": "08 33 13",
+      "name": "Coiling Counter Doors"
+    },
+    {
+      "number": "08 33 23",
+      "name": "Overhead Coiling Doors"
+    },
+    {
+      "number": "08 33 26",
+      "name": "Overhead Coiling Grilles"
+    },
+    {
+      "number": "08 33 43",
+      "name": "Overhead Coiling Smoke Curtains"
+    },
+    {
+      "number": "08 33 44",
+      "name": "Overhead Coiling Fire Curtains"
+    },
+    {
+      "number": "08 36 13",
+      "name": "Sectional Doors"
+    },
+    {
+      "number": "11 13 00",
+      "name": "Loading Dock Equipment"
+    },
+    {
+      "number": "11 13 13",
+      "name": "Loading Dock Bumpers"
+    },
+    {
+      "number": "11 13 16",
+      "name": "Loading Dock Seals and Shelters"
+    },
+    {
+      "number": "11 13 19",
+      "name": "Stationary Loading Dock Equipment"
+    }
   ],
   "keywords": {
-    "Smoke curtains": ["smoke curtain", "smoke guard", "elevator smoke", "smoke containment"],
-    "Dock equipment": ["dock leveler", "dock seal", "dock shelter", "dock bumper", "vehicle restraint"],
-    "Overhead doors": ["overhead coiling", "coiling door", "sectional door", "rolling service door", "overhead door"]
+    "Smoke curtains": [
+      "draft curtain",
+      "elevator smoke",
+      "smoke containment",
+      "smoke curtain",
+      "smoke guard",
+      "smoke-protective curtain"
+    ],
+    "Dock equipment": [
+      "dock leveler",
+      "dock seal",
+      "dock shelter",
+      "dock bumper",
+      "vehicle restraint"
+    ],
+    "Overhead doors": [
+      "overhead coiling",
+      "coiling door",
+      "sectional door",
+      "rolling service door",
+      "overhead door"
+    ],
+    "Fire curtains": [
+      "fire curtain",
+      "fire-protective curtain"
+    ]
   },
-  "drawing_keywords": ["door schedule", "overhead door", "coiling", "sectional", "dock leveler", "smoke curtain"]
+  "drawing_keywords": [
+    "door schedule",
+    "overhead door",
+    "coiling",
+    "sectional",
+    "dock leveler",
+    "smoke curtain"
+  ]
 }
