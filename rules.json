@@ -1,0 +1,18 @@
+{
+  "sections": [
+    {"number": "08 33 13", "name": "Coiling Counter Doors"},
+    {"number": "08 33 23", "name": "Overhead Coiling Doors"},
+    {"number": "08 33 26", "name": "Overhead Coiling Grilles"},
+    {"number": "08 36 13", "name": "Sectional Doors"},
+    {"number": "11 13 00", "name": "Loading Dock Equipment"},
+    {"number": "11 13 13", "name": "Loading Dock Bumpers"},
+    {"number": "11 13 16", "name": "Loading Dock Seals and Shelters"},
+    {"number": "11 13 19", "name": "Stationary Loading Dock Equipment"}
+  ],
+  "keywords": {
+    "Smoke curtains": ["smoke curtain", "smoke guard", "elevator smoke", "smoke containment"],
+    "Dock equipment": ["dock leveler", "dock seal", "dock shelter", "dock bumper", "vehicle restraint"],
+    "Overhead doors": ["overhead coiling", "coiling door", "sectional door", "rolling service door", "overhead door"]
+  },
+  "drawing_keywords": ["door schedule", "overhead door", "coiling", "sectional", "dock leveler", "smoke curtain"]
+}

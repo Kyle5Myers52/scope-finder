@@ -1,0 +1,4 @@
+output/
+bids/
+__pycache__/
+*.pyc
