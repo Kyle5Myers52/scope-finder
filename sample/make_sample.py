@@ -1,8 +1,9 @@
 """Make a small, made-up bid set to test scope_finder (no real project data).
 
 specs.pdf   : cover, table of contents, and a few sections. 08 33 13 is listed in the
-              table of contents but left out of the book on purpose. The elevator smoke
-              curtain is buried in the elevator section, not a door section.
+              table of contents but left out of the book on purpose, and another section
+              cross-references it, so a passing mention must not count as the section being
+              there. The elevator smoke curtain is buried in the elevator section, not a door section.
 drawings.pdf: cover, floor plan, door schedule sheet, and one image-only "scanned" sheet.
 """
 from pathlib import Path
@@ -43,7 +44,8 @@ def specs():
              "DIVISION 14 - CONVEYING EQUIPMENT",
              "14 21 00  Electric Traction Elevators"], footer="TABLE OF CONTENTS - 1")
     page(c, ["SECTION 08 11 13 - HOLLOW METAL DOORS AND FRAMES", "PART 1 - GENERAL",
-             "Steel doors and frames as scheduled."], footer="08 11 13 - 1")
+             "Steel doors and frames as scheduled.",
+             "Frames at coiling counter doors: coordinate with Section 08 33 13."], footer="08 11 13 - 1")
     for n in (1, 2, 3):
         page(c, ["SECTION 08 33 23 - OVERHEAD COILING DOORS" if n == 1 else "OVERHEAD COILING DOORS (CONTINUED)",
                  "Insulated overhead coiling doors, motor operated, as scheduled on the drawings.",
