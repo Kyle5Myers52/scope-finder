@@ -21,9 +21,23 @@ HERE = Path(__file__).parent
 
 
 def section_pattern(number):
-    # "08 33 23" should also match "083323" and "08 33 23.13"-style subsections
+    # Any mention of the number. "08 33 23" also matches "083323", "08  33  23" and "08 33 23.13"-style subsections
     a, b, c = number.split()
-    return re.compile(rf"\b{a}\s?{b}\s?{c}\b")
+    return re.compile(rf"\b{a}\s*{b}\s*{c}\b")
+
+
+def own_page_pattern(number):
+    """Marks a page that belongs to the section itself, not one that only mentions it.
+
+    Matches the section's heading at the start of a line ("SECTION 08 33 23 - OVERHEAD COILING DOORS",
+    "END OF SECTION 08 33 23") or its page footer ("08 33 23 - 4"). A cross-reference such as
+    "Coordinate with Section 08 33 23." matches neither, so it can't make a missing section look present.
+    """
+    a, b, c = number.split()
+    num = rf"{a}\s*{b}\s*{c}(?:\.\d+)?"
+    heading = rf"^[ \t]*(?:END\s+OF\s+)?SECTION\s+{num}[ \t]*(?:[-–—:]|$)"
+    footer = rf"\b{num}[ \t]*[-–—][ \t]*\d{{1,3}}\b"
+    return re.compile(rf"{heading}|{footer}", re.IGNORECASE | re.MULTILINE)
 
 
 def read_pages(path):
@@ -65,16 +79,26 @@ def scan_specs(texts, rules):
     rows = []
     for sec in rules["sections"]:
         pat = section_pattern(sec["number"])
+        own_pat = own_page_pattern(sec["number"])
         in_toc = bool(pat.search(toc_text))
-        pages = [i for i in body if pat.search(texts[i])]
-        if pages:
+        own = [i for i in body if own_pat.search(texts[i])]
+        mentioned = [i for i in body if pat.search(texts[i])]
+        # Pages that mention the section stay listed either way, so nothing that used to be shown is hidden.
+        pages = sorted(set(own) | set(mentioned))
+        note = ""
+        if own:
             status = "Found"
         elif in_toc:
             status = "Listed but missing"
+            if mentioned:
+                note = "Only referenced on these pages; the section's own pages aren't in the book."
+        elif mentioned:
+            status = "Referenced only"
+            note = "Not in the table of contents and its own pages aren't in the book; only referenced on these pages."
         else:
             status = "Not in this set"
         rows.append({"item": f'{sec["number"]} {sec["name"]}', "source": "Specs",
-                     "status": status, "pages": pages})
+                     "status": status, "pages": pages, "note": note})
     for label, words in rules["keywords"].items():
         pages = [i for i in body if any(w in texts[i].lower() for w in words)]
         rows.append({"item": f"Mentions: {label}", "source": "Specs",
@@ -114,10 +138,14 @@ def cover_page(rows):
     for r in rows:
         if y < 60:
             c.showPage(); y = 740
-        c.setFont("Helvetica-Bold" if r["status"] == "Listed but missing" else "Helvetica", 9.5)
+        flagged = r["status"] in ("Listed but missing", "Referenced only")
+        c.setFont("Helvetica-Bold" if flagged else "Helvetica", 9.5)
         c.drawString(54, y, r["item"][:62])
         c.drawString(360, y, r["status"])
-        c.drawString(470, y, (pages_label(r["pages"]) or "-")[:24])
+        label = pages_label(r["pages"]) or "-"
+        if flagged and r["pages"]:
+            label = "ref. " + label  # pages that mention the section, not the section itself
+        c.drawString(470, y, label[:24])
         y -= 15
     c.save()
     buf.seek(0)
@@ -140,7 +168,8 @@ def build_packet(out_path, rows, spec_reader, dwg_reader):
             where[p] = len(writer.pages)
             writer.add_page(reader.pages[p])
         for r in mine:
-            writer.add_outline_item(f'{r["item"]} (p. {pages_label(r["pages"])})', where[r["pages"][0]])
+            refs = "referenced on " if r["status"] in ("Listed but missing", "Referenced only") else ""
+            writer.add_outline_item(f'{r["item"]} ({refs}p. {pages_label(r["pages"])})', where[r["pages"][0]])
     with open(out_path, "wb") as f:
         writer.write(f)
     return len(writer.pages)
@@ -149,20 +178,25 @@ def build_packet(out_path, rows, spec_reader, dwg_reader):
 def write_reports(out, rows, warnings, packet_pages):
     with open(out / "summary.csv", "w", newline="") as f:
         w = csv.writer(f)
-        w.writerow(["Item", "Source", "Status", "Pages", "Sheets"])
+        w.writerow(["Item", "Source", "Status", "Pages", "Sheets", "Note"])
         for r in rows:
             w.writerow([r["item"], r["source"], r["status"], pages_label(r["pages"]),
-                        ", ".join(r.get("sheets", []))])
+                        ", ".join(r.get("sheets", [])), r.get("note", "")])
     lines = ["# Bid scope summary", "",
-             "| Item | Source | Status | Pages | Sheets |", "| --- | --- | --- | --- | --- |"]
+             "| Item | Source | Status | Pages | Sheets | Note |", "| --- | --- | --- | --- | --- | --- |"]
     for r in rows:
         lines.append(f'| {r["item"]} | {r["source"]} | {r["status"]} | {pages_label(r["pages"])} | '
-                     f'{", ".join(r.get("sheets", []))} |')
+                     f'{", ".join(r.get("sheets", []))} | {r.get("note", "")} |')
     lines.append("")
     missing = [r["item"] for r in rows if r["status"] == "Listed but missing"]
     if missing:
         lines.append("**Listed in the table of contents but not in the book (ask for these before bid day):** "
                      + "; ".join(missing))
+        lines.append("")
+    referenced = [r["item"] for r in rows if r["status"] == "Referenced only"]
+    if referenced:
+        lines.append("**Referenced in the book, but the section itself isn't here (check whether it's part of this bid):** "
+                     + "; ".join(referenced))
         lines.append("")
     for wmsg in warnings:
         lines.append(f"**Check:** {wmsg}")

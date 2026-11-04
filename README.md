@@ -32,7 +32,11 @@ In November 2026 I ran it on a real commercial bid set: a 986-page spec book and
 
 ## What it does
 
-- Reports, for each spec section in `rules.json`, whether it's **Found** (and on which pages), **Listed but missing** (in the table of contents, not in the book), or **Not in this set**.
+- Reports, for each spec section in `rules.json`, whether it's:
+  - **Found:** the section's own pages are in the book, recognized by its heading (`SECTION 08 33 23 - ...`) or page footer (`08 33 23 - 4`).
+  - **Listed but missing:** the table of contents lists it but its own pages aren't in the book. A passing mention elsewhere ("coordinate with Section 08 33 13") doesn't count as the section being there; those pages are listed as references instead.
+  - **Referenced only:** not in the table of contents and its own pages aren't in the book, but another section mentions it.
+  - **Not in this set:** no sign of it anywhere.
 - Finds keyword mentions anywhere in the specs and drawings (smoke curtains, dock levelers, coiling and sectional doors), so scope filed under an unexpected section still turns up.
 - Guesses the drawing sheet number (A-601, etc.) from the title block text.
 - Flags pages with no text layer (scanned sheets) so you know what wasn't searched.
@@ -54,6 +58,12 @@ python scope_finder.py --specs sample/specs.pdf --drawings sample/drawings.pdf -
 ```
 
 Sample results are in [`sample_output/summary.md`](sample_output/summary.md). The sample set is fictional; no real project documents are in this repo.
+
+To check how sections are classified (no PDFs needed):
+
+```
+python tests/test_scope_finder.py
+```
 
 To watch for other sections or words, edit `rules.json`.
 
