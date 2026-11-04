@@ -2,3 +2,5 @@ output/
 bids/
 __pycache__/
 *.pyc
+sample/*.pdf
+sample_output/scope_packet.pdf
